@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #428bca;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #ffffff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        li:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hello, This is my todolist</h1>
+    <ul>
+        {% for x in todos %}
+        <li>{{ x }}</li>
+        {% endfor %}
+    </ul> 
+    <form method = 'post'> 
+        <input name = 'newtodo'> 
+        <input type = 'submit'>
+    </form>
+</body>
+
+</html>
