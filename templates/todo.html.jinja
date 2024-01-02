@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
     <style>
         body {
@@ -28,10 +29,36 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
+            position: relative;
         }
 
         li:hover {
             transform: scale(1.05);
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[name='new_todo'] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        input[type='submit'] {
+            background-color: #5bc0de;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type='submit']:hover {
+            background-color: #428bca;
         }
     </style>
 </head>
@@ -40,13 +67,19 @@
     <h1>Hello, This is my todolist</h1>
     <ul>
         {% for x in todos %}
-        <li>{{ x }}</li>
+        <li>
+            {{ x }}
+            <form method="POST" action="/delete_todos/{{ loop.index0 }}">
+                <input type="submit" value="Delete">
+            </form>
+        </li>
         {% endfor %}
-    </ul> 
-    <form method = 'post'> 
-        <input name = 'newtodo'> 
-        <input type = 'submit'>
+    </ul>
+    <form method='post'>
+        <input name='new_todo' placeholder='Add a new todo'>
+        <input type='submit' value='Add Todo'>
     </form>
 </body>
 
 </html>
+
