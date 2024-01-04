@@ -29,4 +29,14 @@ def index():
 
     return render_template('todo.html.jinja', todos=todos)
 
-@app.route
+@app.route('/delete_todos/<int:todo_index>', methods=['POST'])
+def todo_delete(todo_index):
+   
+    with con.cursor() as cursor:
+        cursor.execute("DELETE FROM `todos` WHERE `description` = %s", (todos[todo_index]['description'],))
+        con.commit()
+
+    return redirect('/')
+
+if __name__ == '__main__':
+    app.run(debug=True)
