@@ -11,34 +11,38 @@ conn = pymysql.connect(host='10.100.33.60',
                       charset='utf8mb4',
                       cursorclass=pymysql.cursors.DictCursor)
 
-def get_todos():
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT `description` FROM `Todos`")
-        results = cursor.fetchall()
-        todos = [item['description'] for item in results]
-    return todos
+# ...
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    todos = get_todos()
 
     if request.method == 'POST':
         new_todo = request.form['new_todo']
         with conn.cursor() as cursor:
             cursor.execute(f"INSERT INTO `Todos` (`description`) VALUES ('{new_todo}')")
-        conn.commit()
-        todos = get_todos()
 
-    return render_template('todo.html.jinja', todos=todos)
+        conn.commit()
+    
+    cursor = conn.cursor()
+    cursor.execute("SELECT * from `Todos` ORDER BY `completions`")
+    results = cursor.fetchall() 
+    cursor.close()
+
+   
+    return render_template('todo.html.jinja', todos=results)
 
 @app.route('/delete_todos/<int:todo_index>', methods=['POST'])
 def todo_delete(todo_index):
-    todos = get_todos()
     with conn.cursor() as cursor:
-        cursor.execute("DELETE FROM `Todos` WHERE `description` = %s", (todos[todo_index],))
+        cursor.execute(f"DELETE FROM `Todos` WHERE `id` = {todo_index}")
+    conn.commit()
+
+    return redirect('/') 
+
+@app.route('/complete_todos/<int:todo_index>', methods=['POST'])
+def complete_todo(todo_index):
+    with conn.cursor() as cursor:
+        cursor.execute(f"UPDATE `Todos` SET `completions` = 1 WHERE `id` = {todo_index}")
     conn.commit()
 
     return redirect('/')
-
-if __name__ == '__main__':
-    app.run(debug=True)

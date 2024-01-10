@@ -2,7 +2,21 @@
 <html>
 
 <head>
-    <style>
+    <style> 
+       
+
+        .completed {
+            text-decoration: line-through;
+            font-style: italic;
+            background-color: #d3f4cb; 
+            color: #4caf50; 
+
+        li.completed:hover {
+    transform: scale(1);  
+}
+
+
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #ffcccb; 
@@ -60,18 +74,24 @@
             background-color: #ff007f; 
         }
     </style>
-</head>
+</head> 
 
 <body>
     <h1>Hello, This is my todolist</h1>
     <ul>
-        {% for x in todos %}
-        <li>
-            {{ x }}
-            <form method="POST" action="/delete_todos/{{ loop.index0 }}">
-                <input type="submit" value="Delete">
-            </form>
-        </li>
+        {% for todo in todos %}
+            <li class="{% if todo['completions']%}completed{% endif %}">
+                {% if todo['completions'] %}✔️{% endif %}
+                {{ todo.description }}
+                <form method="POST" action="/delete_todos/{{ todo['id'] }}">
+                    <input type="submit" value="Delete">
+                </form>
+                {%if todo['completions'] == 0%}
+                <form method="POST" action="/complete_todos/{{ todo['id'] }}">
+                    <input type="submit" value="Completed">
+                </form>
+                {%endif%}
+            </li>
         {% endfor %}
     </ul>
     <form method='post'>
